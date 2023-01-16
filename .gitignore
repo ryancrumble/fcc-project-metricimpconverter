@@ -1,2 +1,9 @@
 .env
+
+# Config files
 node_modules
+.yarn
+.idea
+
+# Build
+dist

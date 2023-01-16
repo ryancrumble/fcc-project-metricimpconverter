@@ -91,13 +91,13 @@ function splitter(str) {
 }
 
 function assertionAnalyser(body) {
-  
+
   // already filtered in the test runner
   // // remove comments
   // body = body.replace(/\/\/.*\n|\/\*.*\*\//g, '');
   // // get test function body
   // body = body.match(/\{\s*([\s\S]*)\}\s*$/)[1];
-  
+
   if(!body) return "invalid assertion";
   // replace assertions bodies, so that they cannot
   // contain the word 'assertion'
@@ -136,4 +136,4 @@ function assertionAnalyser(body) {
   return assertions;
 }
 
-module.exports = assertionAnalyser;
+export default assertionAnalyser;
