@@ -2,8 +2,10 @@ import * as chai from "chai";
 import {assert} from "chai";
 import ConvertHandler from "../controllers/convertHandler.js";
 
-let convertHandler = new ConvertHandler();
+const convertHandler = new ConvertHandler();
 
 suite('Unit Tests', function(){
+    it('it reads a whole number input', () => {
 
+    })
 });
