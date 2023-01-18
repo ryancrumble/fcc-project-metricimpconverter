@@ -1,9 +1,5 @@
 .env
-
-# Config files
-node_modules/
 .yarn/
-.idea/
-
-# Build
+node_modules/
 dist/
+.idea/
