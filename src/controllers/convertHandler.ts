@@ -15,8 +15,9 @@ class ConvertHandler {
      * @return {number} The input number
      */
     public getNum(input: string) {
-        let result;
+        const split = input.split(/(\d+)/)
 
+        const result = input.toLowerCase().replace(/[^a-z]/gi, '') || 1;
 
         return result;
     };
