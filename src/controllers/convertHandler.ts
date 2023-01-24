@@ -1,4 +1,5 @@
 import {Unit} from "../types/measurements.js";
+import {ConvertError} from "../types/convert.js";
 
 /**
  * @name ConvertHandler
@@ -14,12 +15,40 @@ class ConvertHandler {
      * @param input {string} Raw string input
      * @return {number} The input number
      */
-    public getNum(input: string) {
-        const split = input.split(/(\d+)/)
+    public getNum(input: string): number | ConvertError {
+        if (!input) {
+            return 'Invalid number'
+        }
 
-        const result = input.toLowerCase().replace(/[^a-z]/gi, '') || 1;
+        // Remove commas
+        input.replace(',', '')
 
-        return result;
+        // Validate fractional number
+        if (input.indexOf('/') !== -1) {
+            let count = 0;
+
+            for (const char of input) {
+                if (char === '/') {
+                    count++
+                }
+            }
+
+            // Return if invalid fraction
+            if (count > 1) {
+                return 'Invalid number'
+            }
+        }
+
+        const value = input.match(/(-\d+|\d+)(,\d+)*(\.\d+)*/g)?.toString() || '1'
+
+        // Handle fractions
+        if (value.indexOf(',') !== -1) {
+            const [numerator, denominator] = value.split(',')
+
+            return parseFloat(numerator) / parseInt(denominator)
+        }
+
+        return parseFloat(value)
     };
 
     /**
