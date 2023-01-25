@@ -1,1 +1,1 @@
-export type ConvertError = 'Invalid number' | 'Invalid unit'
+export type ConvertError = 'Invalid number' | 'Invalid unit' | 'Invalid number and unit'

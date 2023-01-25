@@ -42,4 +42,40 @@ describe('Unit Tests', function () {
         assert.equal(convertHandler.getNum('km'), 1)
     })
 
+    it('correctly reads each valid input unit', () => {
+        // Unit without number
+        assert.equal(convertHandler.getUnit('km'), 'km')
+        assert.equal(convertHandler.getUnit('KM'), 'km')
+
+        // Unit with number
+        assert.equal(convertHandler.getUnit('1km'), 'km')
+        assert.equal(convertHandler.getUnit('1.2km'), 'km')
+        assert.equal(convertHandler.getUnit('1/2km'), 'km')
+        assert.equal(convertHandler.getUnit('gal'), 'gal')
+        assert.equal(convertHandler.getUnit('3/4gal/123'), 'gal')
+
+        // Case-insensitive
+        assert.equal(convertHandler.getUnit('l'), 'l')
+        assert.equal(convertHandler.getUnit('L'), 'l')
+    })
+
+    it('returns an error for an invalid input', () => {
+        assert.equal(convertHandler.getUnit(''), 'Invalid unit')
+        assert.equal(convertHandler.getUnit('1'), 'Invalid unit')
+        assert.equal(convertHandler.getUnit('potato'), 'Invalid unit')
+        assert.equal(convertHandler.getUnit('ll'), 'Invalid unit')
+    })
+
+    it('returns the correct unit for each valid input unit', () => {
+        // Imperial units
+        assert.equal(convertHandler.getUnit('lbs'), 'lbs')
+        assert.equal(convertHandler.getUnit('gal'), 'gal')
+        assert.equal(convertHandler.getUnit('mi'), 'mi')
+
+        // Metric units
+        assert.equal(convertHandler.getUnit('kg'), 'kg')
+        assert.equal(convertHandler.getUnit('l'), 'l')
+        assert.equal(convertHandler.getUnit('km'), 'km')
+    })
+
 });

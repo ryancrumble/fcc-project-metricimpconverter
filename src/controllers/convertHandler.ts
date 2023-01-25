@@ -1,5 +1,6 @@
 import {Unit} from "../types/measurements.js";
 import {ConvertError} from "../types/convert.js";
+import {unitSet} from "../constants/measurements.js";
 
 /**
  * @name ConvertHandler
@@ -57,11 +58,27 @@ class ConvertHandler {
      * @param input {string} Raw string input
      * @return {Unit} The input unit
      */
-    public getUnit(input: any) {
-        let result;
+    public getUnit(input: string): Unit | ConvertError {
+        // No value provided
+        if (!input) {
+            return 'Invalid unit'
+        }
 
-        return result;
-    };
+        const rawUnit = input.toLowerCase().match(/[A-Za-z]+/gi)
+
+        // No unit provided
+        if (!rawUnit) {
+            return 'Invalid unit'
+        }
+
+        const unit = rawUnit[0].toLowerCase() as Unit
+
+        if (!unitSet.has(unit)) {
+            return 'Invalid unit'
+        }
+
+        return unit
+    }
 
     /**
      * @name getReturnUnit
