@@ -30,15 +30,14 @@ describe('Unit Tests', function () {
     })
 
     it('it returns an error on a double-fraction', () => {
-        assert.isString(convertHandler.getNum('3/2/3'))
-        assert.isString(convertHandler.getNum('3/2/3km'))
-        assert.equal(convertHandler.getNum('3/2/3km'), 'Invalid number')
+        assert.isNull(convertHandler.getNum('3/2/3'))
+        assert.isNull(convertHandler.getNum('3/2/3km'))
+        assert.isNull(convertHandler.getNum('3/2/3km'))
     })
 
     it('it defaults to a numerical input of `1` when no numerical input is provided', () => {
-        assert.isString(convertHandler.getNum(''))
+        assert.isNull(convertHandler.getNum(''))
         assert.isNumber(convertHandler.getNum('km'))
-        assert.equal(convertHandler.getNum(''), 'Invalid number')
         assert.equal(convertHandler.getNum('km'), 1)
     })
 
@@ -60,11 +59,11 @@ describe('Unit Tests', function () {
     })
 
     it('returns an error for an invalid input', () => {
-        assert.equal(convertHandler.getUnit(''), 'Invalid unit')
-        assert.equal(convertHandler.getUnit('1'), 'Invalid unit')
-        assert.equal(convertHandler.getUnit('potato'), 'Invalid unit')
-        assert.equal(convertHandler.getUnit('ll'), 'Invalid unit')
-        assert.equal(convertHandler.getUnit('kms'), 'Invalid unit')
+        assert.isNull(convertHandler.getUnit(''))
+        assert.isNull(convertHandler.getUnit('1'))
+        assert.isNull(convertHandler.getUnit('potato'))
+        assert.isNull(convertHandler.getUnit('ll'))
+        assert.isNull(convertHandler.getUnit('kms'))
     })
 
     it('returns the correct unit for each valid input unit', () => {
@@ -90,4 +89,29 @@ describe('Unit Tests', function () {
         assert.equal(convertHandler.spellOutUnit('lbs'), 'pounds')
         assert.equal(convertHandler.spellOutUnit('mi'), 'miles')
     })
+
+    it('returns the imperial/metric equivalent of the input unit', () => {
+        // Metric to imperial
+        assert.equal(convertHandler.getReturnUnit('l'), 'gal')
+        assert.equal(convertHandler.getReturnUnit('kg'), 'lbs')
+        assert.equal(convertHandler.getReturnUnit('km'), 'mi')
+        // Imperial to metric
+        assert.equal(convertHandler.getReturnUnit('gal'), 'l')
+        assert.equal(convertHandler.getReturnUnit('lbs'), 'kg')
+        assert.equal(convertHandler.getReturnUnit('mi'), 'km')
+    })
+
+    it('correctly converts metric to imperial values', () => {
+        assert.equal(convertHandler.convert(1, 'l'), 0.26417217685798894)
+        assert.equal(convertHandler.convert(1, 'kg'), 0.6213719644426107)
+        assert.equal(convertHandler.convert(1, 'km'), 0.6213727366498067)
+    })
+
+    it('correctly converts imperial to metric values', () => {
+        assert.equal(convertHandler.convert(1, 'gal'), 3.78541)
+        assert.equal(convertHandler.convert(1, 'lbs'), 1.609342)
+        assert.equal(convertHandler.convert(1, 'mi'), 1.60934)
+    })
+
+
 });

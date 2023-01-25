@@ -1,6 +1,6 @@
-import {Unit} from "../types/measurements.js";
+import {ImperialUnit, Unit} from "../types/measurements.js";
 import {ConvertError} from "../types/convert.js";
-import {unitLongNameMap, unitSet} from "../constants/measurements.js";
+import {unitConversionRate, unitLongNameMap, unitMap, unitSet} from "../constants/measurements.js";
 
 /**
  * @name ConvertHandler
@@ -16,9 +16,9 @@ class ConvertHandler {
      * @param input {string} Raw string input
      * @return {number} The input number
      */
-    public getNum(input: string): number | ConvertError {
+    public getNum(input: string): number | null {
         if (!input) {
-            return 'Invalid number'
+            return null
         }
 
         // Remove commas
@@ -36,7 +36,7 @@ class ConvertHandler {
 
             // Return if invalid fraction
             if (count > 1) {
-                return 'Invalid number'
+                return null
             }
         }
 
@@ -58,23 +58,23 @@ class ConvertHandler {
      * @param input {string} Raw string input
      * @return {Unit} The input unit
      */
-    public getUnit(input: string): Unit | ConvertError {
+    public getUnit(input: string): Unit | null {
         // No value provided
         if (!input) {
-            return 'Invalid unit'
+            return null
         }
 
         const rawUnit = input.toLowerCase().match(/[A-Za-z]+/gi)
 
         // No unit provided
         if (!rawUnit) {
-            return 'Invalid unit'
+            return null
         }
 
         const unit = rawUnit[0].toLowerCase() as Unit
 
         if (!unitSet.has(unit)) {
-            return 'Invalid unit'
+            return null
         }
 
         return unit
@@ -86,11 +86,17 @@ class ConvertHandler {
      * @param initUnit {Unit} Initial unit of measurement
      * @return {Unit} Metric/imperial equivalent of unit of measurement
      */
-    public getReturnUnit(initUnit: Unit) {
-        let result;
+    public getReturnUnit(initUnit: Unit): Unit | null {
+        for (let [imperial, metric] of unitMap.entries()) {
+            if (initUnit === imperial) {
+                return metric
+            } else if (initUnit === metric) {
+                return imperial
+            }
+        }
 
-        return result;
-    };
+        return null
+    }
 
     /**
      * @name spellOutUnit
@@ -104,17 +110,24 @@ class ConvertHandler {
 
     /**
      * @name convert
-     * @description Converts one value to it's metric/imperial equivalent
+     * @description Converts one value to its metric/imperial equivalent
      * @param initNum {number}  Initial value
      * @param initUnit {number} Initial unit measurement
+     * @return returnNum {number} The converted number value
      */
     public convert(initNum: number, initUnit: Unit) {
-        const galToL = 3.78541;
-        const lbsToKg = 0.453592;
-        const miToKm = 1.60934;
-        let result;
+        const isImperial = unitMap.has(initUnit as ImperialUnit)
+        const conversationRate = unitConversionRate.get(initUnit)
 
-        return result;
+        if (!conversationRate) {
+            throw Error('No conversation rate found for the provided unit')
+        }
+
+        if (isImperial) {
+            return initNum * conversationRate
+        }
+
+        return initNum / conversationRate
     };
 
     /**
