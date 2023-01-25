@@ -64,6 +64,7 @@ describe('Unit Tests', function () {
         assert.equal(convertHandler.getUnit('1'), 'Invalid unit')
         assert.equal(convertHandler.getUnit('potato'), 'Invalid unit')
         assert.equal(convertHandler.getUnit('ll'), 'Invalid unit')
+        assert.equal(convertHandler.getUnit('kms'), 'Invalid unit')
     })
 
     it('returns the correct unit for each valid input unit', () => {
@@ -78,4 +79,15 @@ describe('Unit Tests', function () {
         assert.equal(convertHandler.getUnit('km'), 'km')
     })
 
+    it('correctly returns the spelled-out string unit for each valid input unit', () => {
+        // Metric units
+        assert.equal(convertHandler.spellOutUnit('l'), 'litres')
+        assert.equal(convertHandler.spellOutUnit('kg'), 'kilograms')
+        assert.equal(convertHandler.spellOutUnit('km'), 'kilometres')
+
+        // Imperial units
+        assert.equal(convertHandler.spellOutUnit('gal'), 'gallons')
+        assert.equal(convertHandler.spellOutUnit('lbs'), 'pounds')
+        assert.equal(convertHandler.spellOutUnit('mi'), 'miles')
+    })
 });

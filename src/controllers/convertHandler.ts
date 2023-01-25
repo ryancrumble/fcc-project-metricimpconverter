@@ -1,6 +1,6 @@
 import {Unit} from "../types/measurements.js";
 import {ConvertError} from "../types/convert.js";
-import {unitSet} from "../constants/measurements.js";
+import {unitLongNameMap, unitSet} from "../constants/measurements.js";
 
 /**
  * @name ConvertHandler
@@ -95,14 +95,12 @@ class ConvertHandler {
     /**
      * @name spellOutUnit
      * @description Gets the word of the unit of measurement
-     * @param unit {Unit}
-     * @return {string} Word of measurement e.g. 'kilometers', 'litres'
+     * @param unit {Unit} Unit in lowercase
+     * @return {string | undefined} Word of measurement e.g. 'kilometers', 'litres'
      */
-    public spellOutUnit(unit: Unit) {
-        let result;
-
-        return result;
-    };
+    public spellOutUnit(unit: Unit): string | undefined {
+        return unitLongNameMap.get(unit)
+    }
 
     /**
      * @name convert
