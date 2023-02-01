@@ -103,13 +103,13 @@ describe('Unit Tests', function () {
 
     it('correctly converts metric to imperial values', () => {
         assert.equal(convertHandler.convert(1, 'L'), 0.26417)
-        assert.equal(convertHandler.convert(1, 'kg'), 0.62137)
+        assert.equal(convertHandler.convert(1, 'kg'), 2.20462)
         assert.equal(convertHandler.convert(1, 'km'), 0.62137)
     })
 
     it('correctly converts imperial to metric values', () => {
         assert.equal(convertHandler.convert(1, 'gal'), 3.78541)
-        assert.equal(convertHandler.convert(1, 'lbs'), 1.60934)
+        assert.equal(convertHandler.convert(1, 'lbs'), 0.45359)
         assert.equal(convertHandler.convert(1, 'mi'), 1.60934)
     })
 });
