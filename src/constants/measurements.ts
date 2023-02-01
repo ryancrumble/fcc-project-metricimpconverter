@@ -4,7 +4,7 @@ export const unitSet = new Set<UnitKey>(['gal', 'l', 'lbs', 'kg', 'mi', 'km'])
 export const unitMap = new Map<ImperialUnit, MetricUnit>([['gal', 'l'], ['lbs', 'kg'], ['mi', 'km']])
 
 export const galToL = 3.78541;
-export const lbsToKg = 1.609342;
+export const lbsToKg = 0.45359237;
 export const miToKm = 1.60934;
 
 export const unitLongNameMap = new Map<UnitKey, string>([

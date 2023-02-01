@@ -6,7 +6,6 @@ chai.use(chaiHttp);
 
 import server from '../server.js'
 
-
 describe('Functional Tests', function () {
     it('converts a valid input', function (done) {
         const input = '10L'
@@ -26,6 +25,7 @@ describe('Functional Tests', function () {
                 chai.expect(res.body).to.have.property('returnNum').equal(expectedReturnNum)
                 chai.expect(res.body).to.have.property('returnUnit').equal(expectedReturnUnit)
                 chai.expect(res.body).to.have.property('string').equal(expectedString)
+
                 done()
             })
     })
@@ -38,7 +38,8 @@ describe('Functional Tests', function () {
             .get(`/api/convert?input=${input}`)
             .end((err, res) => {
                 chai.expect(res).to.have.status(200)
-                chai.expect(res.body).to.equal(expectedResponse)
+                chai.expect(res.text).to.equal(expectedResponse)
+
                 done()
             })
     })
@@ -51,7 +52,8 @@ describe('Functional Tests', function () {
             .get(`/api/convert?input=${input}`)
             .end((err, res) => {
                 chai.expect(res).to.have.status(200)
-                chai.expect(res.body).to.equal(expectedResponse)
+                chai.expect(res.text).to.equal(expectedResponse)
+
                 done()
             })
     })
@@ -64,7 +66,8 @@ describe('Functional Tests', function () {
             .get(`/api/convert?input=${input}`)
             .end((err, res) => {
                 chai.expect(res).to.have.status(200)
-                chai.expect(res.body).to.equal(expectedResponse)
+                chai.expect(res.text).to.equal(expectedResponse)
+
                 done()
             })
     })
@@ -87,6 +90,7 @@ describe('Functional Tests', function () {
                 chai.expect(res.body).to.have.property('returnNum').equal(expectedReturnNum)
                 chai.expect(res.body).to.have.property('returnUnit').equal(expectedReturnUnit)
                 chai.expect(res.body).to.have.property('string').equal(expectedString)
+
                 done()
             })
     })
