@@ -1,5 +1,4 @@
 import express from 'express'
-import {expect} from "chai";
 import cors from "cors"
 import dotenv from "dotenv";
 
@@ -8,12 +7,13 @@ dotenv.config()
 import apiRoutes from './routes/api.js'
 import fccTestingRoutes from './routes/fcctesting.js'
 import runner from './test-runner.js'
-import {rootDir} from "./constants/path.js";
+import ConvertHandler from "./controllers/convertHandler.js";
 
+const convertController = new ConvertHandler()
 
 let app = express();
 
-app.use('/public', express.static(rootDir + '/public'));
+app.use('/public', express.static('/public'));
 
 app.use(cors({origin: '*'})); //For FCC testing purposes only
 
@@ -26,6 +26,41 @@ app.route('/')
         res.sendFile(process.cwd() + '/views/index.html');
     });
 
+app.get('/api/convert', (req, res) => {
+    const input = req.query.input as string
+
+    const initNum = convertController.getNum(input)
+    const initUnit = convertController.getUnit(input)
+
+    // Check if valid input
+    if (!initNum && !initUnit) {
+        return res.send('Invalid number and unit')
+    } else if (!initNum) {
+        return res.send('Invalid number')
+    } else if (!initUnit) {
+        return res.send('Invalid unit')
+    }
+
+    const returnNum = convertController.convert(initNum, initUnit);
+    const returnUnit = convertController.getReturnUnit(initUnit);
+
+    if (!returnUnit) {
+        return res.send("Oops, could not get the return unit")
+    }
+
+    const sentenceResult = convertController.getString(initNum, initUnit, returnNum, returnUnit)
+
+    const resultPayload = {
+        initNum,
+        initUnit,
+        returnNum,
+        returnUnit,
+        string: sentenceResult
+    }
+
+    return res.send(resultPayload)
+})
+
 //For FCC testing purposes
 fccTestingRoutes(app);
 
@@ -33,7 +68,7 @@ fccTestingRoutes(app);
 apiRoutes(app);
 
 //404 Not Found Middleware
-app.use(function (req, res, next) {
+app.use(function (req, res) {
     res.status(404)
         .type('text')
         .send('Not Found');

@@ -1,5 +1,4 @@
-import {ImperialUnit, Unit} from "../types/measurements.js";
-import {ConvertError} from "../types/convert.js";
+import {ImperialUnit, UnitKey, Unit, UnitFormatMap} from "../types/measurements.js";
 import {unitConversionRate, unitLongNameMap, unitMap, unitSet} from "../constants/measurements.js";
 
 /**
@@ -22,7 +21,7 @@ class ConvertHandler {
         }
 
         // Remove commas
-        input.replace(',', '')
+        input = input.replace(',', '')
 
         // Validate fractional number
         if (input.indexOf('/') !== -1) {
@@ -56,7 +55,7 @@ class ConvertHandler {
      * @name getUnit
      * @description Extracts the unit of measurement provided
      * @param input {string} Raw string input
-     * @return {Unit} The input unit
+     * @return {UnitKey} The input unit
      */
     public getUnit(input: string): Unit | null {
         // No value provided
@@ -71,27 +70,29 @@ class ConvertHandler {
             return null
         }
 
-        const unit = rawUnit[0].toLowerCase() as Unit
+        let unit = rawUnit[0] as UnitKey
 
         if (!unitSet.has(unit)) {
             return null
         }
 
-        return unit
+        return this.formatUnit(unit)
     }
 
     /**
      * @name getReturnUnit
      * @description Extracts the unit of measurement provided
-     * @param initUnit {Unit} Initial unit of measurement
-     * @return {Unit} Metric/imperial equivalent of unit of measurement
+     * @param initUnit {UnitKey} Initial unit of measurement
+     * @return {UnitKey} Metric/imperial equivalent of unit of measurement
      */
     public getReturnUnit(initUnit: Unit): Unit | null {
+        const _initUnit = initUnit.toLowerCase() as UnitKey
+
         for (let [imperial, metric] of unitMap.entries()) {
-            if (initUnit === imperial) {
-                return metric
-            } else if (initUnit === metric) {
-                return imperial
+            if (_initUnit === imperial) {
+                return this.formatUnit(metric)
+            } else if (_initUnit === metric) {
+                return this.formatUnit(imperial)
             }
         }
 
@@ -101,10 +102,10 @@ class ConvertHandler {
     /**
      * @name spellOutUnit
      * @description Gets the word of the unit of measurement
-     * @param unit {Unit} Unit in lowercase
+     * @param unit {UnitKey} Unit in lowercase
      * @return {string | undefined} Word of measurement e.g. 'kilometers', 'litres'
      */
-    public spellOutUnit(unit: Unit): string | undefined {
+    public spellOutUnit(unit: UnitKey): string | undefined {
         return unitLongNameMap.get(unit)
     }
 
@@ -115,35 +116,52 @@ class ConvertHandler {
      * @param initUnit {number} Initial unit measurement
      * @return returnNum {number} The converted number value
      */
-    public convert(initNum: number, initUnit: Unit) {
-        const isImperial = unitMap.has(initUnit as ImperialUnit)
-        const conversationRate = unitConversionRate.get(initUnit)
+    public convert(initNum: number, initUnit: Unit): number {
+        const isImperial = unitMap.has(initUnit.toLowerCase() as ImperialUnit)
+        const conversationRate = unitConversionRate.get(initUnit.toLowerCase() as UnitKey)
 
         if (!conversationRate) {
             throw Error('No conversation rate found for the provided unit')
         }
 
         if (isImperial) {
-            return initNum * conversationRate
+            return this.formatNumber(initNum * conversationRate)
         }
 
-        return initNum / conversationRate
+        return this.formatNumber(initNum / conversationRate)
     };
+
 
     /**
      * @name getString
      * @description Creates a human-readable sentence of the converted value
      * @param initNum {number}
-     * @param initUnit {Unit}
+     * @param initUnit {UnitKey}
      * @param returnNum {number}
-     * @param returnUnit {Unit}
+     * @param returnUnit {UnitKey}
      * @return {string} Sentence of converted
      */
     public getString(initNum: number, initUnit: Unit, returnNum: number, returnUnit: Unit) {
-        let result;
+        const initLongNameUnit = this.spellOutUnit(initUnit.toLowerCase() as UnitKey);
+        const returnLongNameUnit = this.spellOutUnit(returnUnit.toLowerCase() as UnitKey);
 
-        return result;
+        return `${initNum} ${initLongNameUnit} converts to ${returnNum} ${returnLongNameUnit}`;
     };
+
+
+    private formatNumber(value: number): number {
+        return parseFloat(value.toFixed(5))
+    }
+
+    private formatUnit(value: UnitKey): Unit {
+        const formatted = UnitFormatMap.get(value)
+
+        if (!formatted) {
+            throw Error('Unit not found. Cannot format unit')
+        }
+
+        return formatted
+    }
 
 }
 

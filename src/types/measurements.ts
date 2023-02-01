@@ -1,13 +1,15 @@
 export type ImperialUnit = 'gal' | 'lbs' | 'mi'
 export type MetricUnit = 'l' | 'kg' | 'km'
 
-export type Unit = ImperialUnit | MetricUnit
+export type UnitKey = ImperialUnit | MetricUnit
 
-export enum UnitEnum {
-    GALLON = 'gal',
-    LITRE = 'L',
-    POUND = 'lbs',
-    KILOGRAM = 'kg',
-    MILES = 'mi',
-    KILOMETRE = 'km'
-}
+export type Unit = 'gal' | 'lbs' | 'mi' | 'L' | 'kg' | 'km'
+
+export const UnitFormatMap: Map<UnitKey, Unit> = new Map([
+    ['gal', 'gal'],
+    ['l', 'L'],
+    ['lbs', 'lbs'],
+    ['kg', 'kg'],
+    ['mi', 'mi'],
+    ['km', 'km']
+])

@@ -54,8 +54,8 @@ describe('Unit Tests', function () {
         assert.equal(convertHandler.getUnit('3/4gal/123'), 'gal')
 
         // Case-insensitive
-        assert.equal(convertHandler.getUnit('l'), 'l')
-        assert.equal(convertHandler.getUnit('L'), 'l')
+        assert.equal(convertHandler.getUnit('l'), 'L')
+        assert.equal(convertHandler.getUnit('L'), 'L')
     })
 
     it('returns an error for an invalid input', () => {
@@ -74,7 +74,7 @@ describe('Unit Tests', function () {
 
         // Metric units
         assert.equal(convertHandler.getUnit('kg'), 'kg')
-        assert.equal(convertHandler.getUnit('l'), 'l')
+        assert.equal(convertHandler.getUnit('l'), 'L')
         assert.equal(convertHandler.getUnit('km'), 'km')
     })
 
@@ -92,26 +92,24 @@ describe('Unit Tests', function () {
 
     it('returns the imperial/metric equivalent of the input unit', () => {
         // Metric to imperial
-        assert.equal(convertHandler.getReturnUnit('l'), 'gal')
+        assert.equal(convertHandler.getReturnUnit('L'), 'gal')
         assert.equal(convertHandler.getReturnUnit('kg'), 'lbs')
         assert.equal(convertHandler.getReturnUnit('km'), 'mi')
         // Imperial to metric
-        assert.equal(convertHandler.getReturnUnit('gal'), 'l')
+        assert.equal(convertHandler.getReturnUnit('gal'), 'L')
         assert.equal(convertHandler.getReturnUnit('lbs'), 'kg')
         assert.equal(convertHandler.getReturnUnit('mi'), 'km')
     })
 
     it('correctly converts metric to imperial values', () => {
-        assert.equal(convertHandler.convert(1, 'l'), 0.26417217685798894)
-        assert.equal(convertHandler.convert(1, 'kg'), 0.6213719644426107)
-        assert.equal(convertHandler.convert(1, 'km'), 0.6213727366498067)
+        assert.equal(convertHandler.convert(1, 'L'), 0.26417)
+        assert.equal(convertHandler.convert(1, 'kg'), 0.62137)
+        assert.equal(convertHandler.convert(1, 'km'), 0.62137)
     })
 
     it('correctly converts imperial to metric values', () => {
         assert.equal(convertHandler.convert(1, 'gal'), 3.78541)
-        assert.equal(convertHandler.convert(1, 'lbs'), 1.609342)
+        assert.equal(convertHandler.convert(1, 'lbs'), 1.60934)
         assert.equal(convertHandler.convert(1, 'mi'), 1.60934)
     })
-
-
 });
